@@ -1,0 +1,52 @@
+Number of players:
+	2-5
+
+Card used:
+	standard 52-card deck
+
+Basic game rule: 
+	Eight cards are dealt to each player.	The remaining cards of the deck 	are placed face down at the 	center 	of the table. The top card 	is then turned face up to start the game.
+
+Players discard by matching rank or suit with the top card of the discard pile, starting with the player left of the dealer. They can also play any 8 at any time. If a player is unable to match the rank or suit of the top card of the discard pile and does not have an 8, they draw a card from the stockpile. When a player plays an 8, they must declare the suit that the next player is to play; that player must then follow the named suit or play another 8.
+
+As an example: Once 6? is played the next player:
+
+can play any of the other 6s
+can play any of the clubs
+can play any 8 (then must declare a suit)
+can draw from the stockpile until willing and able to play one of the above
+
+If the players run out of cards in the deck, reshuffle the discard pile and keep playing.
+
+The game ends as soon as one player has emptied their hand.
+
+Players can start another round if they want.
+
+Classes:
+	class SLN: already have it ;)
+	class SLL: already have it ;)
+class Card: int value, String suit
+class Player: SLL cards
+class GameStat: SLL discardPile
+		   SLL drawingPile
+		   Player[] players
+class GamePlay: instructions() {add J=11, Q=12, K=13}
+		   shuffle(Card[] cards)
+		   deal(Card[] cards, Player[] players) {final numOfCards}
+		   playByValue(Player player, int value)
+   		   playBySuit(Player player, Stirng suit)
+		   playEight(Player player)
+		   isValid(Card discard, Card potential)
+		   endOfGame(Player[] players)
+		   gameLoop()
+etc......
+
+
+
+
+
+
+
+
+
+
