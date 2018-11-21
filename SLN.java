@@ -1,6 +1,4 @@
 /**
- * Nicole Tai
- * taijiayue1997@brandeis.edu
  * The singly linked node (SLN) object is defined in this file
  */
 

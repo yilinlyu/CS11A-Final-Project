@@ -1,6 +1,4 @@
 /**
- * Nicole Tai
- * taijiayue1997@brandeis.edu
  * The singly linked list (SLL) object is defined in this file
  */
 
@@ -78,6 +76,56 @@ public class SLL<T> {
 	}
 	
 	/**
+	 * This method removes and returns the node at the given index.  
+	 * @param index the index at which the node will be removed
+	 * @return the node removed
+	 */
+	public SLN<T> remove(int index) {
+		if (index>(size-1) | index<0) { //throws exception is index cannot be found or SLL is empty
+			throw new IndexOutOfBoundsException();
+		}
+		SLN<T> prev = this.head; //node before removed node
+		if (index==0) { //remove head
+			this.head = prev.next;
+			size--;
+			if (this.size==1) { //update tail if size=1
+				this.tail = null;
+			}
+			return prev;
+		}
+		
+		//remove from middle or end
+		for (int i=1; i<index; i++) {
+			prev = prev.next;
+		}
+		SLN<T> curr = prev.next; //removed node
+		prev.next = curr.next; //reset pointer from prev to curr.next
+		size--;
+		if (this.size==(index+1)) { //update tail if removed from the end
+			this.tail = prev;
+		}
+		return curr;
+	}
+	
+	/**
+	 * This method removes and returns the first node in the SLL. 
+	 * @return the first node in the SLL
+	 */
+	public SLN<T> remove() {
+		if (this.size==0) { //throws exception if SLL is empty
+			throw new IndexOutOfBoundsException();
+		}
+		SLN<T> curr = this.head;
+		this.head = this.head.next;
+		curr.next = null;
+		size--;
+		if (this.size==0) { //if only 1 node in SLL
+			this.tail = null;
+		}
+		return curr;
+	}
+	
+	/**
 	 * This method returns a String representation of all the elements in the SLL from head to tail. 
 	 * @return a string representation of all the elements in the SLL
 	 */
@@ -85,7 +133,7 @@ public class SLL<T> {
 		SLN<T> curr = this.head;
 		String s = "";
 		if (this.size==0) {
-			s = "Empty";
+			return s;
 		}
 		s = s+curr.toString();
 		curr = curr.next;
