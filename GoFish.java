@@ -22,7 +22,7 @@ public class GoFish extends CardSuitsValues {
 	 * @throws InterruptedException 
 	 */
 	public GoFish() throws InterruptedException {
-		//introduction();
+		introduction();
 		this.players = setPlayers();
 		TimeUnit.SECONDS.sleep(2);
 		System.out.println("The players are all set!\n");
@@ -60,6 +60,7 @@ public class GoFish extends CardSuitsValues {
 			System.out.println("In either case, if the player gets what he/she asked, regardless from another player or the pool, he/she \ngets another turn.");
 			System.out.println("At any point of the game, if a player gets all four cards of the same face value, a book is formed and removed \nfrom the player's hands.");
 			System.out.println("The game ends when all cards have formed complete books, and the person with the most books win!\n");
+			System.out.println("PS. J, Q, and K are sometimes displayed as 11, 12, and 13 repectively in this game, and when prompted \nto enter card value, you should also enter numbers only!\n");
 		}
 	}
 	
@@ -155,7 +156,11 @@ public class GoFish extends CardSuitsValues {
 	 * @return card drawn
 	 */
 	public Card drawCard() {
-		return this.pool.remove().data;
+		if (this.pool.size>0) {
+			return this.pool.remove().data;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -184,6 +189,7 @@ public class GoFish extends CardSuitsValues {
 		if (!currP.haveNoCards()) {
 			if (currP.getRole()==1) {
 				System.out.println(nextP.toString());
+				TimeUnit.SECONDS.sleep(2);
 			}
 			int askedVal = currP.ask();
 			System.out.println(currP.getName()+" asked for "+askedVal+"...");
@@ -196,16 +202,24 @@ public class GoFish extends CardSuitsValues {
 				currP.receiveCard(givenCard);
 				System.out.println(currP.getName()+" gets another turn!\n");
 				TimeUnit.SECONDS.sleep(2);
-				turn(currP, nextP);
+				if (!isEnd()) {
+					turn(currP, nextP);
+				}
 			} else {
+				if (this.pool.size==0) {
+					System.out.println("No cards left in the pool! Just keep playing...");
+					TimeUnit.SECONDS.sleep(2);
+				}
 				System.out.println(currP.getName()+" drew a card from the pool...");
+					TimeUnit.SECONDS.sleep(2);
 				Card drawnCard = drawCard();
-				TimeUnit.SECONDS.sleep(2);
 				currP.receiveCard(drawnCard);
-				if (drawnCard.value==askedVal) {
+				if (drawnCard.value==askedVal) {	
 					System.out.println("It's the same as what "+currP.getName()+" asked! So he/she gets another turn...\n");
 					TimeUnit.SECONDS.sleep(2);
-					turn(currP, nextP);
+					if (!isEnd()) {
+						turn(currP, nextP);
+					}
 				} else {
 					System.out.println();
 					TimeUnit.SECONDS.sleep(2);
@@ -216,6 +230,9 @@ public class GoFish extends CardSuitsValues {
 			TimeUnit.SECONDS.sleep(2);
 			currP.receiveCard(this.pool);
 			this.pool = new SLL<>();
+			if (!isEnd()) {
+				turn(currP, nextP);
+			}
 		}
 	}
 	

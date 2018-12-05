@@ -1,5 +1,5 @@
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The player object for playing go fish is defined here
@@ -117,6 +117,7 @@ public class PlayerGF {
 					System.out.println("A book of "+curr.data.head.data.value+"s has formed!");
 					this.inHand.remove(curr.data); //remove book
 					this.book.insert(curr.data.head.data.value); //add to book field
+					this.numOfCard -= 4;
 				}
 				insert = true;
 			} else { //if doesn't match move on
@@ -141,31 +142,11 @@ public class PlayerGF {
 			return;
 		}
 		
-		this.numOfCard += cards.size;
+		SLN<Card> c = cards.head;
 		
-		SLN<SLL<Card>> curr = this.inHand.head; //current series of cards
-		boolean insert = false;
-		while(!insert && curr!=null) {
-			if(curr.data.head.data.value==cards.head.data.value) { //if current series' value matches with new cards, insert
-				SLN<Card> c = cards.head;
-				for (int i=0; i<cards.size; i++) {
-					curr.data.insert(c.data);
-					c = c.next;
-				}
-				if(curr.data.size==4) { //check if a book is formed
-					this.inHand.remove(curr.data); //remove book
-					this.book.insert(curr.data.head.data.value); //add to book field
-					System.out.println("A book of "+curr.data.head.data.value+"s has formed!");
-				}
-				insert = true;
-			} else { //if doesn't match move on
-				curr = curr.next;
-			}
-		}
-		
-		//if no matching value found, add to end of SLL
-		if (!insert) {
-			this.inHand.insert(cards);
+		while (c!=null) {
+			this.receiveCard(c.data);
+			c = c.next;
 		}
 		
 	}
@@ -173,8 +154,9 @@ public class PlayerGF {
 	/**
 	 * This method allows the player to give out cards
 	 * @param val rank of cards to give out
+	 * @throws InterruptedException 
 	 */
-	public SLL<Card> giveCard(int val) {
+	public SLL<Card> giveCard(int val) throws InterruptedException {
 		if (this.role==0) {
 			SLL<Card> givenCards = sysGive(val);
 			if (givenCards==null) {
@@ -183,6 +165,7 @@ public class PlayerGF {
 			return givenCards;
 		} else {
 			System.out.println(this.toString());
+			TimeUnit.SECONDS.sleep(2);
 			Scanner console = new Scanner(System.in);
 			System.out.print("Please enter the number of cards you want to give; enter 0, if you have none: ");
 			int vals = console.nextInt();
@@ -199,7 +182,7 @@ public class PlayerGF {
 			}
 			
 			while(givenCard.size!=vals) {
-				System.out.print("For example, if you want to give three 9s, enter 3: ");
+				System.out.print("Are you sure? Please be honest! For example, if you want to give three 9s, enter 3: ");
 				vals = console.nextInt();
 			}
 			
@@ -229,9 +212,11 @@ public class PlayerGF {
 	 * This method allows the player to ask for a value
 	 * @param next the player been asked
 	 * @return value the user asked
+	 * @throws InterruptedException 
 	 */
-	public int ask() {
+	public int ask() throws InterruptedException {
 		System.out.println(this.toString());
+		TimeUnit.SECONDS.sleep(2);
 		if(this.role==0) {
 			return systemAsk();
 		} else {
